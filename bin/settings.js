@@ -67,10 +67,10 @@ const FIELDS = [
     key: 'order',
     kind: 'enum',
     options: ['fleet', 'active', 'recent', 'off'],
-    fallback: 'active',
+    fallback: MODE_ORDER[view.defaultMode()],
     virtual: true,
     read: orderValue,
-    help: "Agents panel order: fleet (the dev fleet's groups, from lanes.json; active order where that file is missing), active (grouped, busiest first, stale last), recent (flat, by activity) or off (Herdr's own order). Applies while agents_panel is plugin.",
+    help: "Agents panel order: fleet (dev fleet groups), active (grouped, busiest first), recent (flat) or off (Herdr's own). Needs agents_panel = plugin.",
   },
   {
     key: 'reorder_workspaces',

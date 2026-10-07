@@ -81,3 +81,7 @@ test('a stamp in the future, or not a number, is no data', () => {
   assert.equal(reach.read(fixture('{"at":1e999,"lanes":{}}'), NOW), null);
   assert.equal(reach.read(fixture({ ...FRESH, at: '1' }), NOW), null);
 });
+
+test('an empty answer is hollow, not green', () => {
+  assert.deepEqual(reach.lamps({}), { tone: 'none', text: '\u25cb\u25cb' });
+});

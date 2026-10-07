@@ -110,6 +110,16 @@ test('stopping keeps cat_key so the fleet view holds its order', () => {
   const state = require('../lib/state');
   const stop = state.stopNames();
   assert.ok(!stop.includes('cat_key'), 'cat_key was cleared on stop');
+  assert.ok(!stop.includes('tab_key'), 'tab_key was cleared on stop');
   assert.ok(stop.includes('reach_ok'), 'the lamps go on stop');
   assert.ok(state.stopNames({ purge: true }).includes('cat_key'), 'purge takes everything');
+});
+
+test('a lane whose name is a prefix of another sorts first', () => {
+  const f = fleet.load(
+    fixture([...LANES, { name: 'dev', group: 'developers' }, { name: 'developers-x', group: 'developers' }], GROUPS),
+  );
+  const a = fleet.sortKey(f.forLabel('w', 'dev'), 'w:1');
+  const b = fleet.sortKey(f.forLabel('w', 'developers-x'), 'w:2');
+  assert.ok(a < b);
 });

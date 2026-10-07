@@ -22,7 +22,9 @@ require('../lib/node-version');
 //
 // Herdr disables the panel's grouped/priority toggle while any override is
 // active, so this script is the way in AND the way out — bind it to a key via
-// a plugin_action custom command, or run the plugin's actions.
+// a plugin_action custom command, or run the plugin's actions. The cycle is
+// fleet -> active -> recent -> off -> fleet (fleet only where the fleet's files
+// are readable; otherwise it starts at active).
 //
 // `--native` is the only mode that touches BOTH layers of the panel: the sort
 // override here and the `[ui.sidebar.*]` rows in config.toml (lib/view.js
@@ -38,6 +40,7 @@ const { pluginId } = require('../lib/herdr');
 const { detachedNode } = require('../lib/spawn');
 
 const SAID = {
+  category: 'agent view: fleet (dev fleet groups)',
   grouped: 'agent view: active (grouped, recent first)',
   recent: 'agent view: recent (flat)',
   null: 'agent view: back to panel order',
