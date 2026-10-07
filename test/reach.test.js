@@ -92,3 +92,8 @@ test('the writer’s max_age sets the freshness window', () => {
   assert.ok(reach.read(fixture({ ...old, max_age: 300 }), NOW), 'inside the writer’s own window');
   assert.equal(reach.read(fixture({ ...FRESH, max_age: 5 }), NOW), null, 'outside a short window');
 });
+
+test('an absurd max_age is capped, so a hung writer still goes neutral', () => {
+  const old = { ...FRESH, at: NOW / 1000 - 3600, max_age: 1e9 };
+  assert.equal(reach.read(fixture(old), NOW), null);
+});

@@ -92,7 +92,10 @@ for (const terminal of require('../lib/font').TERMINALS) {
 // answered with a third of the way to the background by one terminal and half
 // by another. It rendered at 1.8:1 and 1.5:1: present, drawn, unreadable.
 // Nothing checked. Reported in #5.
-// The dark panel is the operator's terminal background (Dracula, #282a36).
+// The dark panel is the operator's terminal background (Dracula, #282a36). On it
+// the dim ink (#6272a4, ANSI 8) sits at ~3.03:1, right at the floor, and a few
+// brand inks used as working-title text (cline, qwen) fall below it; marks are
+// scored apart from text (markColours below), titles are not.
 const PANELS = { light: '#eff1f5', dark: '#282a36' };
 // WCAG's large/bold threshold. Sidebar labels are short and mostly bold; the
 // floor is here to catch inks that cannot be read at all, not to force body

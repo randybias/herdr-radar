@@ -1,7 +1,8 @@
 # Dev-fleet palette
 
 This fork is development-environment tooling for the THAOS dev fleet. Its colours are a dev-tooling choice: the
-sidebar matches the operator's terminal theme, and glyph shape carries the meaning so it reads in monochrome.
+sidebar matches the operator's terminal theme. The lifecycle marks carry their meaning in their shape, so they read
+in monochrome; the three idle recency tiers draw one mark and differ by colour only.
 
 ## Why hex
 
@@ -26,7 +27,8 @@ Copied from the ANSI palette of Ghostty's bundled theme "Dracula", which the ope
 | selected row (theme selection) | -         | `#44475a` |
 
 Three recency tiers need three greys and the theme gives two plus white, so fresh and normal are close.
-`test/palette-dark.test.js` re-reads the theme file and fails if these drift from it.
+`test/palette-dark.test.js` re-reads the theme file and fails if the six state colours drift from it (it skips
+where Ghostty is not installed).
 
 ## Light set
 
@@ -36,8 +38,10 @@ light Ghostty theme, copy its ANSI roles the same way.
 ## Pinning the side
 
 Ghostty here uses one theme day and night, so the desktop's light/dark is the wrong authority. Set
-`appearance = "dark"` in the plugin config to pin the dark set (`auto` follows the desktop, as upstream does).
+`appearance = "dark"` in the plugin config to pin the dark set (`auto` follows the desktop, as upstream does). The
+pin is written into the config blocks by the configure action, so run it again after changing the setting.
 
 ## Unchanged
 
-Vendor logo marks keep their published brand colours. The only motion is upstream's pulse on a blocked mark.
+Vendor logo marks keep upstream's brand colours (a few are adjusted for legibility, as upstream's comments say). No
+motion was added or changed: the working spinner and the pulse on a blocked mark are upstream's.

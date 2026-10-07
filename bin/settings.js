@@ -166,6 +166,13 @@ const FIELDS = [
     help: "Follow the desktop's light/dark and switch Herdr's theme with it (once a minute).",
   },
   {
+    key: 'appearance',
+    kind: 'enum',
+    options: ['auto', 'light', 'dark'],
+    fallback: 'auto',
+    help: 'Pin the palette side whatever the desktop says. Run the configure action after changing it.',
+  },
+  {
     key: 'active_row_bg_light',
     table: 'colors',
     kind: 'color',

@@ -250,8 +250,9 @@ the config file and restarts the daemon.
 | `trim_group_prefix` | `true` | drop the workspace name from a title when the header above already shows it |
 | `worktree_mark` | `U+F418` | the mark on a worktree header, needs a Nerd Font; empty for none |
 | `follow_appearance` | `true` | switch Herdr's theme with the desktop's light/dark |
+| `appearance` | `auto` | `light` or `dark` pins the palette side whatever the desktop says (for a terminal that does not follow it); run the configure action after changing it |
 | `colors.active_row_bg_light` | `#b9cdf2` | selected-row fill for a light theme; empty keeps the theme's own |
-| `colors.active_row_bg_dark` | `#414868` | selected-row fill for a dark theme |
+| `colors.active_row_bg_dark` | `#44475a` | selected-row fill for a dark theme |
 
 `row_label` picks what names an agent row. `title` is the session's own title,
 `tab` is the name of the tab it runs in, and `both` puts the tab name in front of
