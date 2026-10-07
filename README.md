@@ -292,6 +292,16 @@ Start with `herdr plugin log list --plugin hhdebb.herdr-radar --limit 20`: every
 leaves its output and errors there.
 
 <details>
+<summary><b>Installed the fonts by hand (Font Book) on macOS</b></summary>
+
+The plugin only recognises its own hash-named copy of the icon font, which Font Book does not
+create, so set `variant = "font"` in the plugin config and run the configure action. Ghostty needs no
+restart: Reload Configuration (cmd+shift+,) picks up the new fonts and the codepoint map
+(`U+E1A0–U+E1BA` and `U+E1C0–U+E1C5`). Only `HerdrAgentIconsMax-Regular.ttf` is needed there;
+`JetBrainsMonoHerdr-Regular.ttf` is for terminals with no codepoint map.
+</details>
+
+<details>
 <summary><b>Font installed, logos still show as boxes or question marks</b></summary>
 
 The terminal has not reloaded its fonts. Open a new window; if that is not enough, quit the
