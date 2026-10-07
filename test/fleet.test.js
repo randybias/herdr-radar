@@ -79,3 +79,37 @@ test('the fleet view orders panes by group, then lane, unknown workspaces last',
   const order = Frame.prototype.displayOrder.call({}, entries, 'category', {}, groupOf).map((e) => e.workspace);
   assert.deepEqual(order, ['w2', 'w1', 'w3']);
 });
+
+test('pane 10 sorts after pane 2 inside a lane', () => {
+  const f = fleet.load(fixture(LANES, GROUPS));
+  const g = f.forLabel('w', 'builder');
+  assert.ok(fleet.sortKey(g, 'w:2') < fleet.sortKey(g, 'w:10'));
+});
+
+test('a cat_key that moves on its own is republished', async (t) => {
+  const herdr = require('../lib/herdr');
+  const { Frame } = require('../lib/frame');
+  const sent = [];
+  t.mock.method(herdr, 'reportMetadataAsync', async (_pane, _source, tokens) => {
+    if ('cat_key' in tokens) sent.push(tokens.cat_key);
+    return true;
+  });
+  t.mock.method(herdr, 'reportMetadata', () => true);
+  const frame = new Frame();
+  const entry = { pane: 'w:p1', workspace: 'w', tab: 't', name: 'claude', title: 'x' };
+  const keys = { minuteKey: () => '1', wsKeys: new Map(), tabKeys: new Map() };
+  for (const catKey of [null, '00|a|w:p00000001']) {
+    const jobs = [];
+    frame.paneJobs(entry, 'idle', { tabs: new Map(), keys, indent: '', spinStep: 0, catKey }, 0, [], jobs);
+    await Promise.all(jobs);
+  }
+  assert.deepEqual(sent, [null, '00|a|w:p00000001']);
+});
+
+test('stopping keeps cat_key so the fleet view holds its order', () => {
+  const state = require('../lib/state');
+  const stop = state.stopNames();
+  assert.ok(!stop.includes('cat_key'), 'cat_key was cleared on stop');
+  assert.ok(stop.includes('reach_ok'), 'the lamps go on stop');
+  assert.ok(state.stopNames({ purge: true }).includes('cat_key'), 'purge takes everything');
+});

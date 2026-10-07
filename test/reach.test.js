@@ -74,3 +74,10 @@ test('a lane row publishes exactly one lamp token and clears the others', async 
   await Promise.all(jobs);
   assert.deepEqual(sent[0], { reach_ok: null, reach_bad: '✗●', reach_none: null });
 });
+
+test('a stamp in the future, or not a number, is no data', () => {
+  const future = { ...FRESH, at: NOW / 1000 + reach.MAX_AGE_S + 1 };
+  assert.equal(reach.read(fixture(future), NOW), null);
+  assert.equal(reach.read(fixture('{"at":1e999,"lanes":{}}'), NOW), null);
+  assert.equal(reach.read(fixture({ ...FRESH, at: '1' }), NOW), null);
+});
