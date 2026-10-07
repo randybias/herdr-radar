@@ -143,3 +143,54 @@ test('row model: the running model wins, the file model is a fallback, a Pi lane
   assert.equal(fleet.rowTitle('lane', null), 'lane');
   assert.equal(fleet.rowTitle('lane', 'opus'), 'lane (opus)');
 });
+
+function withDisplays(displays) {
+  const lanesFile = fixture(LANES, GROUPS);
+  fs.writeFileSync(path.join(path.dirname(lanesFile), 'displays.json'), JSON.stringify(displays));
+  return lanesFile;
+}
+
+const DISPLAYS = {
+  groups: ['reports'],
+  panes: [
+    {
+      name: 'changelog',
+      group: 'reports',
+      title: '24-hr changelog (main)',
+      description: "main's commits in the last 24 h",
+    },
+    { name: 'board', group: 'reports', title: 'fleet board' },
+  ],
+};
+
+test('display panes group after every lane group, under their own group', () => {
+  const f = fleet.load(withDisplays(DISPLAYS));
+  const d = f.forLabel('w', 'changelog');
+  assert.equal(d.label, 'reports');
+  assert.equal(d.rank, GROUPS.length, 'after misc');
+  assert.equal(d.title, '24-hr changelog (main)');
+  assert.equal(d.description, "main's commits in the last 24 h");
+  assert.equal(d.isDisplay, true);
+  assert.equal(d.isLane, false);
+  assert.ok(fleet.sortKey(f.forLabel('w', 'builder'), 'w:1') < fleet.sortKey(d, 'w:2'));
+  assert.equal(f.forLabel('w', 'board').description, null);
+});
+
+test('a display group that is a lane group, or an unknown one, is not honoured', () => {
+  const bad = {
+    groups: ['reports'],
+    panes: [
+      { name: 'x', group: 'misc', title: 'x' },
+      { name: 'y', group: 'nope', title: 'y' },
+    ],
+  };
+  const f = fleet.load(withDisplays(bad));
+  assert.equal(f.forLabel('w1', 'x').isDisplay, false, 'misc is a lane group');
+  assert.equal(f.forLabel('w2', 'y').isDisplay, false, 'group not declared');
+});
+
+test('a lane name wins over a display of the same name; no displays.json is fine', () => {
+  const clash = { groups: ['reports'], panes: [{ name: 'builder', group: 'reports', title: 'x' }] };
+  assert.equal(fleet.load(withDisplays(clash)).forLabel('w', 'builder').isLane, true);
+  assert.equal(fleet.load(fixture(LANES, GROUPS)).forLabel('w', 'board').isDisplay, false);
+});
