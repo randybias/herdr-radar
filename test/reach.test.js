@@ -28,9 +28,9 @@ const FRESH = {
 
 test('a fresh file gives each lane its mail and model answers', () => {
   const r = reach.read(fixture(FRESH), NOW);
-  assert.deepEqual(r.lane('a'), { mail: true, model: true });
-  assert.deepEqual(r.lane('b'), { mail: false, model: true });
-  assert.deepEqual(r.lane('c'), { mail: true, model: null });
+  assert.deepEqual(r.lane('a'), { mail: true, model: true, model_id: null });
+  assert.deepEqual(r.lane('b'), { mail: false, model: true, model_id: null });
+  assert.deepEqual(r.lane('c'), { mail: true, model: null, model_id: null });
 });
 
 test('a lane the file does not list has no answer', () => {
@@ -96,4 +96,14 @@ test('the writer’s max_age sets the freshness window', () => {
 test('an absurd max_age is capped, so a hung writer still goes neutral', () => {
   const old = { ...FRESH, at: NOW / 1000 - 3600, max_age: 1e9 };
   assert.equal(reach.read(fixture(old), NOW), null);
+});
+
+test('a lane answer carries the running model id', () => {
+  const body = {
+    ...FRESH,
+    lanes: { a: { mail: true, model: true, model_id: 'claude-opus-5-5' }, b: { mail: true, model: null } },
+  };
+  const r = reach.read(fixture(body), NOW);
+  assert.equal(r.lane('a').model_id, 'claude-opus-5-5');
+  assert.equal(r.lane('b').model_id, null);
 });

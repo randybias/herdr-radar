@@ -123,3 +123,23 @@ test('a lane whose name is a prefix of another sorts first', () => {
   const b = fleet.sortKey(f.forLabel('w', 'developers-x'), 'w:2');
   assert.ok(a < b);
 });
+
+test('the model shown is the one the lane runs, shortened for a row', () => {
+  assert.equal(fleet.shortModel('claude-opus-5-5'), 'opus-5.5');
+  assert.equal(fleet.shortModel('claude-sonnet-5-5'), 'sonnet-5.5');
+  assert.equal(fleet.shortModel('tokenfactory/deepseek-v4.1-flash-uncensored-fp8'), 'deepseek-v4.1-flash');
+  assert.equal(fleet.shortModel('tokenfactory/glm-5.3-flash-uncensored-fp8'), 'glm-5.3-flash');
+  assert.equal(fleet.shortModel(null), null);
+  assert.equal(fleet.shortModel(''), null);
+});
+
+test('row model: the running model wins, the file model is a fallback, a Pi lane never shows the file model', () => {
+  const claude = { runtime: 'claude', model: 'opus' };
+  const pi = { runtime: 'pi', model: 'opus' };
+  assert.equal(fleet.rowModel(claude, 'claude-sonnet-5-5'), 'sonnet-5.5');
+  assert.equal(fleet.rowModel(claude, null), 'opus');
+  assert.equal(fleet.rowModel(pi, null), null);
+  assert.equal(fleet.rowModel(pi, 'tokenfactory/glm-5.3-flash-uncensored-fp8'), 'glm-5.3-flash');
+  assert.equal(fleet.rowTitle('lane', null), 'lane');
+  assert.equal(fleet.rowTitle('lane', 'opus'), 'lane (opus)');
+});
