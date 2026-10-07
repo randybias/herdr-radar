@@ -37,9 +37,13 @@ test('a block whose Spaces row is over the limit is recognised', () => {
   assert.equal(managed.blockOverLimit(quoted), false, 'a bracket in a string counted as structure');
 });
 
-test('the vendors without a working cell are exactly the retired tokens', () => {
+test('the retired tokens are the lost working marks and the vendor logo row', () => {
   const kept = new Set(palette.spaceWorkingVendors);
-  const retired = palette.brandVendors.filter((v) => !kept.has(v)).map((v) => `space_working_${v}`);
+  const retired = [
+    ...palette.brandVendors.filter((v) => !kept.has(v)).map((v) => `space_working_${v}`),
+    ...palette.brandVendors.map((v) => `space_logo_${v}`),
+    'space_logo_other',
+  ];
   assert.deepEqual(state.RETIRED_SPACE_TOKENS, retired);
   for (const name of state.RETIRED_SPACE_TOKENS) assert.ok(!state.SPACE_TOKENS.includes(name), name);
 });
@@ -51,11 +55,11 @@ test('retired working marks are cleared once, before the state is written', asyn
     sent.push(Object.keys(params.tokens ?? {}));
     return { result: {} };
   });
-  await state.writeSpaceState('test', 'w-limit', 'space_none', '·', {}, 'name');
+  await state.writeSpaceState('test', 'w-limit', 'space_none', '·', 'name');
   const firstBatch = sent.length;
   assert.ok(firstBatch >= 2, 'nothing was cleared before the write');
   assert.deepEqual(sent[0].sort(), [...state.RETIRED_SPACE_TOKENS].sort(), 'the first report was not the clear');
-  await state.writeSpaceState('test', 'w-limit', 'space_none', '·', {}, 'name');
+  await state.writeSpaceState('test', 'w-limit', 'space_none', '·', 'name');
   const again = sent.slice(firstBatch);
   assert.ok(
     again.every((names) => !names.some((n) => state.RETIRED_SPACE_TOKENS.includes(n))),
