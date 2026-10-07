@@ -6,7 +6,7 @@ require('../lib/node-version');
 // Install-time setup, run by the manifest's `[[build]]` hook when Herdr
 // installs the plugin from GitHub, and available by hand:
 //
-//   node bin/setup.js            managed blocks + font + terminal map
+//   node bin/setup.js            managed blocks (never the font or a terminal config)
 //   node bin/setup.js --force    redo the setup even if it was done before
 //
 // The daemon launcher (bin/agent-state.js) runs the same checks on every
