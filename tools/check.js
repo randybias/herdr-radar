@@ -92,7 +92,8 @@ for (const terminal of require('../lib/font').TERMINALS) {
 // answered with a third of the way to the background by one terminal and half
 // by another. It rendered at 1.8:1 and 1.5:1: present, drawn, unreadable.
 // Nothing checked. Reported in #5.
-const PANELS = { light: '#eff1f5', dark: '#191724' };
+// The dark panel is the operator's terminal background (Dracula, #282a36).
+const PANELS = { light: '#eff1f5', dark: '#282a36' };
 // WCAG's large/bold threshold. Sidebar labels are short and mostly bold; the
 // floor is here to catch inks that cannot be read at all, not to force body
 // text ratios onto a tier whose job is to recede.
