@@ -85,3 +85,10 @@ test('a stamp in the future, or not a number, is no data', () => {
 test('an empty answer is hollow, not green', () => {
   assert.deepEqual(reach.lamps({}), { tone: 'none', text: '\u25cb\u25cb' });
 });
+
+test('the writer’s max_age sets the freshness window', () => {
+  const old = { ...FRESH, at: NOW / 1000 - 200 };
+  assert.equal(reach.read(fixture(old), NOW), null, 'older than the default window');
+  assert.ok(reach.read(fixture({ ...old, max_age: 300 }), NOW), 'inside the writer’s own window');
+  assert.equal(reach.read(fixture({ ...FRESH, max_age: 5 }), NOW), null, 'outside a short window');
+});
