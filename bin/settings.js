@@ -172,6 +172,13 @@ const FIELDS = [
     help: 'The mark on a worktree header, after the branch corner. Enter a codepoint like U+F418, or empty for none.',
   },
   {
+    key: 'appearance',
+    kind: 'enum',
+    options: ['auto', 'dark', 'light'],
+    fallback: 'auto',
+    help: "auto follows the desktop; dark or light fixes the palette and Herdr's theme, whatever the desktop says.",
+  },
+  {
     key: 'follow_appearance',
     kind: 'bool',
     fallback: true,

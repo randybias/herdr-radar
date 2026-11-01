@@ -272,6 +272,7 @@ the config file and restarts the daemon.
 | `row_label` | `title` | what names an agent row: `title`, `tab` (the tab's name) or `both`; replaces `show_tab` |
 | `trim_group_prefix` | `true` | drop the workspace name from a title when the header above already shows it |
 | `worktree_mark` | `U+F418` | the mark on a worktree header, needs a Nerd Font; empty for none |
+| `appearance` | `auto` | `auto` follows the desktop's light/dark; `dark` or `light` fixes the palette and Herdr's theme on that side and ignores the desktop (a light Mac desktop with a dark terminal: set `appearance = "dark"`, then run the Configure action) |
 | `follow_appearance` | `true` | switch Herdr's theme with the desktop's light/dark |
 | `colors.active_row_bg_light` | `#b9cdf2` | selected-row fill for a light theme; empty keeps the theme's own |
 | `colors.active_row_bg_dark` | `#414868` | selected-row fill for a dark theme |
