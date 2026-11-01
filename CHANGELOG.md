@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.5.1-rh.1
+
+- **`appearance = "dark" | "light"`** fixes the palette and Herdr's theme, ignoring the desktop. Default `auto` is unchanged.
+
 ## 1.5.1 — 2026-10-31
 
 - **Radar is in maintenance mode.** Herdr's new app, herdr-app, now has
